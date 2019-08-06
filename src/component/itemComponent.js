@@ -10,7 +10,9 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
-
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@material-ui/core/Link';
+import { MemoryRouter as Router } from 'react-router';
 const useStyles = makeStyles(theme => ({
     fab: {
         margin: theme.spacing(1),
@@ -26,7 +28,7 @@ const useStyles = makeStyles(theme => ({
     },
     button: {
         margin: theme.spacing(0),
-        ms:10,
+        ms: 10,
         background: 'green',
         color: 'white',
 
@@ -39,6 +41,7 @@ const useStyles = makeStyles(theme => ({
 export default function Item(props) {
     const classes = useStyles();
     const handler = props.action;
+    const product = props.data;
     const [value, setValue] = React.useState(0);
     function IncrementValue() {
         setValue(value + 1);
@@ -49,30 +52,32 @@ export default function Item(props) {
             setValue(value - 1);
         }
     }
-    function addToCard(){
-        handler(value*props.price,props.id);
+    function addToCard() {
+        handler(product, value);
+        setValue(0);
     }
     return (
         <Card className={classes.card}>
-            <CardActionArea>
-                <CardMedia
+            <Link component={RouterLink} to={`/product/${product.id}`}>
 
-                    className={classes.media}
-                    image={props.imgUrl}
-                    title={props.itemName}
-                />
+                <CardActionArea>
+                    <CardMedia
+                        className={classes.media}
+                        image={product.image}
+                        title={product.name}
+                    />
 
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="h2" align="center">
-                        <span text-align="center">  {props.itemName}</span>
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p" align="center">
-                        <span> {props.price} Lei</span>
-                    </Typography>
-                </CardContent>
+                    <CardContent>
+                        <Typography gutterBottom variant="h5" component="h2" align="center">
+                            <span text-align="center">  {product.name}</span>
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p" align="center">
+                            <span> {product.price} Lei</span>
+                        </Typography>
+                    </CardContent>
 
-            </CardActionArea>
-
+                </CardActionArea>
+            </Link>
             <CardActions style={{ justifyContent: 'center' }} >
                 <div>
                     <Fab size="small" aria-label="Add" className={classes.fab} onClick={IncrementValue}>
@@ -83,7 +88,7 @@ export default function Item(props) {
                         <RemoveIcon />
                     </Fab>
                     <br />
-                
+
                     <Button variant="contained" className={classes.button} onClick={addToCard}>
                         Add to cart</Button> </div>
             </CardActions>
