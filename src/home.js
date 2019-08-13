@@ -8,14 +8,8 @@ import SimpleModal from './component/modal';
 export default class Home extends React.Component {
     constructor(props) {
         super(props)
-        const m = new Map();
         this.state = {
-            count: 0,
-            data: [],
-            totalSumm: 0,
-            userSelect: {},
             products: [],
-            productsQuantity: m,
             showCartModal: false
         }
 
@@ -40,9 +34,9 @@ export default class Home extends React.Component {
             this.state.productsQuantity.set(product, quantity)
         }
     }
-    onCartClickHandler() {
+    onCartClickHandler(status) {
         this.setState({
-            showCartModal: true
+            showCartModal: status
         })
     }
 
@@ -69,9 +63,14 @@ export default class Home extends React.Component {
         return (
             <div>
                 
-                    <SimpleModal status={this.state.showCartModal} />
+                    <SimpleModal
+                        status={this.state.showCartModal}
+                        onClose={ () => this.onCartClickHandler(false) }
+                        products = {this.state.products}
+                        productsQuantity={this.state.productsQuantity}
+                    />
                     <Header total={this.state.totalSumm}
-                        onCartClickListener={this.onCartClickHandler}
+                        onCartClickListener={() => this.onCartClickHandler(true)}
                         quantity={this.state.productsQuantity.size} />
                     <br />
                     <Grid container spacing={3}>
